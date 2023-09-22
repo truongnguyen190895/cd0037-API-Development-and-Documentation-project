@@ -181,12 +181,6 @@ def create_app(test_config=None):
 
         return jsonify({"question": formatted_question})
 
-    """
-    @TODO:
-    Create error handlers for all expected errors
-    including 404 and 422.
-    """
-
     def not_found(error):
         return (
             jsonify({"success": False, "error": 404, "message": "Resource not found"}),
