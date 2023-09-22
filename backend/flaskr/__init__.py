@@ -24,8 +24,11 @@ def create_app(test_config=None):
         )
         return response
 
-    @app.route("/categories")
+    @app.route("/categories", methods=["GET"])
     def get_categories():
+        if request.method != "GET":
+            abort(405)
+
         categories = Category.query.all()
         formatted_categories = {
             str(category.id): category.type for category in categories
@@ -46,6 +49,9 @@ def create_app(test_config=None):
         formatted_categories = {
             str(category.id): category.type for category in categories
         }
+
+        if len(formatted_questions) == 0:
+            abort(404)
 
         response = {
             "success": True,
@@ -109,7 +115,7 @@ def create_app(test_config=None):
 
         for field in required_fields:
             if field not in payload or not payload[field]:
-                abort(400)
+                abort(422)
 
         question_text = payload["question"]
         answer_text = payload["answer"]
@@ -126,12 +132,9 @@ def create_app(test_config=None):
             db.session.add(new_question)
             db.session.commit()
             return jsonify({"success": True, "created_question_id": new_question.id})
-        except Exception as e:
+        except:
             db.session.rollback()
-            abort(
-                500,
-                description=f"An error occurred while creating the question: {str(e)}",
-            )
+            abort(422)
 
     @app.route("/categories/<int:category_id>/questions", methods=["GET"])
     def get_questions_by_category(category_id):
@@ -179,20 +182,36 @@ def create_app(test_config=None):
         else:
             formatted_question = None  # No available questions
 
-        return jsonify({"question": formatted_question})
+        return jsonify({"success": True, "question": formatted_question})
 
+    @app.errorhandler(404)
     def not_found(error):
         return (
             jsonify({"success": False, "error": 404, "message": "Resource not found"}),
             404,
         )
 
+    @app.errorhandler(422)
     def unprocessable_entity(error):
         return (
             jsonify(
                 {"success": False, "error": 422, "message": "Unprocessable Content"}
             ),
             422,
+        )
+
+    @app.errorhandler(405)
+    def method_not_allowed(error):
+        return (
+            jsonify({"success": False, "error": 405, "message": "Method Not Allowed"}),
+            405,
+        )
+
+    @app.errorhandler(400)
+    def method_not_allowed(error):
+        return (
+            jsonify({"success": False, "error": 400, "message": "Bad Request"}),
+            400,
         )
 
     return app
