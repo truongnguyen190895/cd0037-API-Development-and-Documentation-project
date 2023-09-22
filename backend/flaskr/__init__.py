@@ -8,18 +8,21 @@ from models import setup_db, Question, Category
 
 QUESTIONS_PER_PAGE = 10
 
+
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__)
     setup_db(app)
+    CORS(app)
 
-    """
-    @TODO: Set up CORS. Allow '*' for origins. Delete the sample route after completing the TODOs
-    """
-
-    """
-    @TODO: Use the after_request decorator to set Access-Control-Allow
-    """
+    @app.after_request
+    def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type, Authorization"
+        )
+        return response
 
     """
     @TODO:
@@ -27,6 +30,14 @@ def create_app(test_config=None):
     for all available categories.
     """
 
+    @app.route("/categories")
+    def get_categories():
+        categories = Category.query.all()
+        formatted_categories = {
+            str(category.id): category.type for category in categories
+        }
+        categories_response = {"success": True, "categories": formatted_categories}
+        return jsonify(categories_response)
 
     """
     @TODO:
@@ -40,6 +51,30 @@ def create_app(test_config=None):
     ten questions per page and pagination at the bottom of the screen for three pages.
     Clicking on the page numbers should update the questions.
     """
+
+    @app.route("/questions")
+    def get_questions():
+        page = request.args.get("page", default=1, type=int)
+
+        start = (page - 1) * QUESTIONS_PER_PAGE
+        end = start + QUESTIONS_PER_PAGE
+
+        questions = Question.query.all()
+        categories = Category.query.all()
+        formatted_questions = [question.format() for question in questions[start:end]]
+        formatted_categories = {
+            str(category.id): category.type for category in categories
+        }
+
+        response = {
+            "success": True,
+            "questions": formatted_questions,
+            "totalQuestions": len(questions),
+            "categories": formatted_categories,
+            "currentCategory": None,
+        }
+
+        return jsonify(response)
 
     """
     @TODO:
@@ -99,4 +134,3 @@ def create_app(test_config=None):
     """
 
     return app
-
