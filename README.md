@@ -107,42 +107,54 @@ The API will return four error types when requests fail:
 #### GET /categories
 
 - General:
-  - Returns an object with two keys: success and categories.
-  - "success" key indicate response status
-  - "categories" key contains an object of id: category_string key:value pairs
+  - Returns a list of all available categories.
+  - The response includes a dictionary of category IDs (keys) and their corresponding names (values).
 - Sample: `curl http://127.0.0.1:5000/categories`
 
 ```{
-  "categories":
-    {
-      "author": "Stephen King",
-      "id": 1,
-      "rating": 5,
-      "title": "The Outsider: A Novel"
+  "categories": {
+    '1' : "Science",
+    '2' : "Art",
+    '3' : "Geography",
+    '4' : "History",
+    '5' : "Entertainment",
+    '6' : "Sports"
     },
   "success": true,
 }
 ```
 
-#### POST /books
+#### GET /questions?page=${integer}
 
 - General:
-  - Creates a new book using the submitted title, author and rating. Returns the id of the created book, success value, total books, and book list based on current page number to update the frontend.
-- `curl http://127.0.0.1:5000/books?page=3 -X POST -H "Content-Type: application/json" -d '{"title":"Neverwhere", "author":"Neil Gaiman", "rating":"5"}'`
+
+  - Return a paginated list of questions, a total number of questions, all categories.
+  - You must specify the page parameter in the query to indicate the page number.
+
+- `curl http://127.0.0.1:5000/questions?page=1`
 
 ```
 {
-  "books": [
-    {
-      "author": "Neil Gaiman",
-      "id": 24,
-      "rating": 5,
-      "title": "Neverwhere"
-    }
-  ],
-  "created": 24,
   "success": true,
-  "total_books": 17
+  "questions": [
+    {
+      "id": 1,
+      "question": "This is a question",
+      "answer": "This is an answer",
+      "difficulty": 5,
+      "category": 4
+    },
+    // Additional questions...
+  ],
+  "total_questions": 100,
+  "categories": {
+    '1' : "Science",
+    '2' : "Art",
+    '3' : "Geography",
+    '4' : "History",
+    '5' : "Entertainment",
+    '6' : "Sports"
+  }
 }
 ```
 

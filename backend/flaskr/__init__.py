@@ -36,7 +36,7 @@ def create_app(test_config=None):
         categories_response = {"success": True, "categories": formatted_categories}
         return jsonify(categories_response)
 
-    @app.route("/questions")
+    @app.route("/questions", methods=["GET"])
     def get_questions():
         page = request.args.get("page", default=1, type=int)
 
