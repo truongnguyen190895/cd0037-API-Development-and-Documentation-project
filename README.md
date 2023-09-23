@@ -178,16 +178,38 @@ The API will return four error types when requests fail:
 }
 ```
 
-#### PATCH /books/{book_id}
+#### POST /questions
 
 - General:
-  - If provided, updates the rating of the specified book. Returns the success value and id of the modified book.
-- `curl http://127.0.0.1:5000/books/15 -X PATCH -H "Content-Type: application/json" -d '{"rating":"1"}'`
+  - Create a new question. Returns the newly created question id, success value.
+- `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"question": "This is a question", "answer": "This is an answer", "category": 1, "difficulty": 1}'`
 
 ```
 {
-  "id": 15,
-  "success": true
+  "success": true,
+  "created_question_id": 1
+}
+```
+
+#### POST /questions
+
+- General:
+  - Search questions base on user's input. Returns list of questions that match the searchTerm value.
+- `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"searchTerm": "what is this"}'`
+
+```
+{
+  "success": true,
+  "total_questions": 1,
+  "questions": [
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }
+  ]
 }
 ```
 
