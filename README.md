@@ -18,6 +18,10 @@ Completing this trivia app will give you the ability to structure plan, implemen
 
 [Fork](https://help.github.com/en/articles/fork-a-repo) the project repository and [clone](https://help.github.com/en/articles/cloning-a-repository) your forked repository to your machine. Work on the project locally and make sure to push all your changes to the remote repository before submitting the link to your repository in the Classroom.
 
+### Pre-requisites and Local Development
+
+Developers using this project should already have Python3, pip and node installed on their local machines.
+
 ## About the Stack
 
 We started the full stack application for you. It is designed with some key functional areas:
@@ -26,7 +30,7 @@ We started the full stack application for you. It is designed with some key func
 
 The [backend](./backend/README.md) directory contains a partially completed Flask and SQLAlchemy server. You will work primarily in `__init__.py` to define your endpoints and can reference models.py for DB and SQLAlchemy setup. These are the files you'd want to edit in the backend:
 
-1. `backend/flaskr/__init__.py`
+1. ```backend/flaskr/__init__.py```
 2. `backend/test_flaskr.py`
 
 > View the [Backend README](./backend/README.md) for more details.
