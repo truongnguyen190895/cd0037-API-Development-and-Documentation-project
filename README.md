@@ -213,12 +213,49 @@ The API will return four error types when requests fail:
 }
 ```
 
+#### GET /categories/{category_id}/questions
+
+- General:
+  - Get all questions that belong to a specific category. Returns list of questions belong to the category, total question number and success value.
+- `curl http://127.0.0.1:5000/categories/5/questions`
+
+```
+{
+  "success": true,
+  "totalQuestions": 1,
+  "questions": [
+    {
+      "answer": "Tom Cruise",
+      "category": 5,
+      "difficulty": 4,
+      "id": 4,
+      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?"
+    }
+  ]
+}
+```
+
+#### POST /quizzes
+
+- General:
+  - Retrieve quiz questions for playing a quiz game. Returns a random quiz question or null if no more questions are available
+    `curl http://127.0.0.1:5000/questions -X POST -H "Content-Type: application/json" -d '{"quiz_category": {"id": 1, "type": "Science"}, "previous_questions": [1, 2, 3]}'`
+
+```
+{
+  "success": true,
+  "question": {
+    "id": 4,
+    "question": "What is the chemical symbol for gold?",
+    "answer": "Au",
+    "difficulty": 2,
+    "category": 1
+  }
+}
+```
+
 ## Deployment N/A
 
 ## Authors
 
-Yours truly, Coach Caryn
-
-## Acknowledgements
-
-The awesome team at Udacity and all of the students, soon to be full stack extraordinaires!
+Yours truly, Truong Nguyen
