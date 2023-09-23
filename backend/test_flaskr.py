@@ -2,7 +2,7 @@ import os
 import unittest
 import json
 from flask_sqlalchemy import SQLAlchemy
-
+from settings import DB_TEST_NAME, DB_USER, DB_PASSWORD
 from flaskr import create_app
 from models import setup_db, Question, Category
 
@@ -14,9 +14,9 @@ class TriviaTestCase(unittest.TestCase):
         """Define test variables and initialize app."""
         self.app = create_app()
         self.client = self.app.test_client
-        self.database_name = "trivia_test"
+        self.database_name = DB_TEST_NAME
         self.database_path = "postgresql://{}/{}".format(
-            "postgres:123456@localhost:5432", self.database_name
+            DB_USER + ":" + DB_PASSWORD + "@localhost:5432", self.database_name
         )
         setup_db(self.app, self.database_path)
 
@@ -173,9 +173,7 @@ class TriviaTestCase(unittest.TestCase):
 
     def test_get_quiz_question_fail(self):
         """Test retrieving a quiz without quiz_category."""
-        payload = {
-            "previous_questions": []
-        }
+        payload = {"previous_questions": []}
 
         response = self.client().post("/quizzes", json=payload)
         data = json.loads(response.data)
